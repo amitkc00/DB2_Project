@@ -4,7 +4,7 @@ MAIN=btree
 
 # you need to change the below path
 
-MINIBASE = /Users/skurunji/Desktop/Btree
+# MINIBASE = /Users/skurunji/Desktop/Btree
 
 CC=g++
 
