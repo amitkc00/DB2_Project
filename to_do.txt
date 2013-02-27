@@ -1,0 +1,4 @@
+bt_builder.cpp - responsible for building the tree and splitting nodes
+bt_index.cpp - root node to n-1 level nodes (nodes above leaf nodes)
+bt_leaf.cpp - sorted linked list of nodes at the very bottom
+bt_scan.cpp - scanning functions
