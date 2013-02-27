@@ -1,4 +1,13 @@
-bt_builder.cpp - responsible for building the tree and splitting nodes
-bt_index.cpp - root node to n-1 level nodes (nodes above leaf nodes)
-bt_leaf.cpp - sorted linked list of nodes at the very bottom
-bt_scan.cpp - scanning functions
+bt_builder.cpp - responsible for building the tree and splitting nodes   - Amit
+bt_index.cpp - root node to n-1 level nodes (nodes above leaf nodes)     - Mike
+bt_leaf.cpp - sorted linked list of nodes at the very bottom             - Amit
+bt_scan.cpp - scanning functions                                         - Mike
+bt_node.cpp - basic node                                                 - Mike   DONE
+
+
+
+SCHEDULE:
+3/5  - Have design/layout done
+3/12 - Finish coding
+3/19 - Finish testing
+3/26 - Try to implement delete

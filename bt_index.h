@@ -28,12 +28,11 @@ public:
 	~BtreeIndex(){};
 		
 	//insert key of type "KeyId", keyCount of type "int", leftChild and rightChild pointers of type BtreeNode*
-	Status insertKey(KeyId, int, BtreeNode*& leftChild, BtreeNode*& rightChild);
-
+	Status insertKey(KeyId, int, BtreeNode* leftChild, BtreeNode* rightChild);
 	
 	Status deleteKey(KeyId, int);
 		
-	Status searchKey(KeyId, int, BtreeNode*& childPtr);
+	Status searchKey(KeyId, int, BtreeNode* childPtr);
 
 };
 
