@@ -5,31 +5,36 @@
 
 #include "bt_builder.h"
 
-Status insertBuilderKey(KeyId) {
+BtreeBuilder::~BtreeBuilder(){
+  destroyBtree();
+}
+
+Status BtreeBuilder::insertBuilderKey(KeyId) {
 
 
 }
 
-Status deleteBuilderKey(KeyId) {
+Status BtreeBuilder::deleteBuilderKey(KeyId) {
 
 }
 
-Status splitNode(KeyId, KeyId *&, BtreeNode *, BtreeNode *&, BtreeNode *&) {
+Status BtreeBuilder::splitNode(KeyId, KeyId *&, BtreeNode *, BtreeNode *&, BtreeNode *&) {
 
 
 }
 
 
-BtreeScan* openScan(KeyId lo_key, KeyId hi_key) {
+BtreeScan* BtreeBuilder::openScan(KeyId lo_key, KeyId hi_key) {
 
 }
 
-Status findStartPosition(BtreeScan* , KeyId) {
+Status BtreeBuilder::findStartPosition(BtreeScan* , KeyId) {
 
 }
 
-Status destroyBtree () {
-
+Status BtreeBuilder::destroyBtree () {
+  delete root;
+  return OK;
 }
 
 

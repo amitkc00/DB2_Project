@@ -47,6 +47,9 @@ public:
 	KeyId getKey(int n)
 	{ return key[n]; }
 
+	void setKey(KeyId keyID, int n)
+	{ key[n] = keyID; }
+
 	BtreeNode* getPtr(int n)
 	{ return ptr[n]; }
 		

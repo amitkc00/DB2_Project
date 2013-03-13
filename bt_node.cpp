@@ -1,20 +1,6 @@
 #include "bt_node.h"
 
 
-//TO DO - implement functions below. 
-
-/*
-
-        int type;               //can be index or leaf
-        int keyCount;           //number of keys in the node
-
-        KeyId key[MAX_NUM_KEYS];        //key of the record
-        BtreeNode *ptr[MAX_NUM_PTRS];   //In leaf node pointers will be null
-
-        BtreeNode *parentPtr;
-
-*/
-
 BtreeNode::BtreeNode(){
   
   int i ;
@@ -31,6 +17,8 @@ BtreeNode::BtreeNode(){
   parentPtr = NULL;
 
 }
+
+BtreeNode::~BtreeNode(){}
 
 int BtreeNode::get_keyCount(){
   return keyCount;

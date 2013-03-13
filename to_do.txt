@@ -11,3 +11,15 @@ SCHEDULE:
 3/12 - Finish coding
 3/19 - Finish testing
 3/26 - Try to implement delete
+
+
+
+NOTES:
+
+bt_builder is responsible for splitting nodes and promoting leaf nodes to index nodes.
+
+Leaf and index nodes need to correctly return codes when they cannot add keys due to being full. 
+
+With these codes the bt_builder knows when to split and promote nodes.
+
+I am guessing that the pointers in index nodes point to leaf nodes and leaf node indexes are null.
