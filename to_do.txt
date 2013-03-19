@@ -22,4 +22,4 @@ Leaf and index nodes need to correctly return codes when they cannot add keys du
 
 With these codes the bt_builder knows when to split and promote nodes.
 
-I am guessing that the pointers in index nodes point to leaf nodes and leaf node indexes are null.
+for index nodes in both searching and inserting count is ignored.

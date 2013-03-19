@@ -23,6 +23,7 @@ public:
 		set_type(INDEX);
 		set_keyCount(0);
 		//include all other initializations here
+		//BtreeNode initializer should be called by default
 	};
 
 	~BtreeIndex(){};

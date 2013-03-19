@@ -2,59 +2,67 @@
 #include "bt_errors.h"
 
 
-
-
-/*
-        //insert key of type "KeyId", keyCount of type "int", leftChild and rightChild pointers of type BtreeNode*
-        Status insertKey(KeyId, int, BtreeNode*& leftChild, BtreeNode*& rightChild);
-
-        Status deleteKey(KeyId, int);
-
-        Status searchKey(KeyId, int, BtreeNode*& childPtr);
-*/
-
 Status BtreeIndex::insertKey(KeyId key, int count, BtreeNode* leftChild, BtreeNode* rightChild){
   //insert key into array at index count, insert leftChild at index count and rightChild at index count + 1
-  setKey(key, count);
-  setPtr(leftChild, count);
-  setPtr(rightChild, count + 1);
-  /*  
-  int tcount = get_keyCount();
-  int i;
-  tcount += count;
-  if(tcount > MAX_NUM_KEYS)
+
+  KeyId current_keyCount = get_keyCount();
+
+  if (current_keyCount == MAX_NUM_KEYS){
+    //index node is full
+
     return INDEX_IS_FULL;
-  set_keyCount(tcount);
-  for(i = 0; i < tcount; i++){
-    if( (i == 0) && (getKey(i) > key) ){
-      //insert into front of array
-      KeyId temp_key = key;
-      KeyId temp_key2;
-      for(; i > tcount; i++){
-	temp_key2 = getKey(i);
-	setKey(i, temp_key);
-	temp_key = temp_key2;
+  } else {
+    //parse list
+
+    int i, j; 
+
+    for(i = 0; i < MAX_NUM_KEYS; i++){
+      if (getKey(i) == -1) {
+	//end of the list
+
+	setKey(key, i);
+	setPtr(leftChild, i);
+	setPtr(rightChild, i + 1);
+	set_keyCount(current_keyCount + 1);
+	return OK;
+
+      } else if ((i == 0) && (getKey(i) > key)){
+	//beginning of the list
+	
+	//shift everything before me to the right
+	for(j = current_keyCount + 1; j > i; j--){
+	  setKey(getKey(j-1), j);
+	  setPtr(getPtr(j), j + 1);
+	}
+	//once shifted, I can insert in-place
+	setKey(key, i);
+	setPtr(leftChild, i);
+	setPtr(rightChild, i + 1);	  
+	set_keyCount(current_keyCount + 1);
+	return OK;
+
+      } else if( (getKey(i - 1) < key) && (getKey(i) > key) ){
+	//middle of the list
+
+	//shift everything before me to the right
+	for(j = current_keyCount + 1; j > i; j--){
+	  setKey(getKey(j-1), j);
+	  setPtr(getPtr(j), j + 1);
+	}
+	//once shifted, I can insert in-place
+	setKey(key, i);
+	setPtr(leftChild, i);
+	setPtr(rightChild, i + 1);	  
+	set_keyCount(current_keyCount + 1);
+	return OK;
       }
-      return OK;
-    } else if(i + 1 == tcount){
-      //insert into end
-      setKey(key, tcount);
-      return OK;
-    } else if ( (getKey(i) < key) && (getKey(i+1) > key) ){
-      //insert at i+1
-      KeyId temp_key = key;
-      KeyId temp_key2;
-      i++;
-      for(; i > tcount; i++){
-	temp_key2 = getKey(i);
-	setKey(i, temp_key);
-	temp_key = temp_key2;
-      }
-      return OK;
     }
-    }*/
-  return FAIL;
+  }
+
+  //should never get here
+ return FAIL;
 }
+
 
 Status BtreeIndex::deleteKey(KeyId key, int count){
   return OK;
@@ -66,28 +74,39 @@ Status BtreeIndex::searchKey(KeyId key, int count, BtreeNode* childPtr){
   int num_keys = get_keyCount();
   for(i = 0; i < num_keys; i++){
     if(i == num_keys){
+      //end of the list
+
       if(getKey(i) > key){
 	//left pointer
 	child = getPtr(i+1);
 	*childPtr = *child;
-	return child->searchKey(key, count);
+	return OK;
       }
+
       //right pointer
       child = getPtr(i+1);
       *childPtr = *child;
-      return child->searchKey(key, count);
+      return OK;
+
     } else if( (i == 0) && (getKey(i) > key) ){
+      //beginning of the list
+
       //left pointer
       child = getPtr(i);
       *childPtr = *child;
-      return child->searchKey(key, count);
+      return OK;
+
     } else if ( (getKey(i-1) < key) && (getKey(i) > key) ){
+      //in middle of list
+
       //left pointer
       child = getPtr(i);
       *childPtr = *child;
-      return child->searchKey(key, count);
+      return OK;
     }
   }
+
+  //should never get here
   return FAIL;
 }
 

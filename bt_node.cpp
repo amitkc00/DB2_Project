@@ -12,7 +12,7 @@ BtreeNode::BtreeNode(){
     ptr[i] = NULL;
 
   for(i = 0; i < MAX_NUM_KEYS; i++)
-    key[i] = 0;
+    key[i] = -1;
 
   parentPtr = NULL;
 
