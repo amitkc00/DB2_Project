@@ -52,6 +52,26 @@ Status BtreeBuilder::deleteBuilderKey(KeyId) {
 
 Status BtreeBuilder::splitNode(KeyId, KeyId *&, BtreeNode *, BtreeNode *&, BtreeNode *&) {
 
+/*
+Points for splitNode.
+
+Node *N;
+keyId Key;
+
+BtreeNode temp = new LeafNode;
+
+for (i = max-keys/2 ; i < max-keys; i++) {
+	temp.setKey(N->getKey(i),i)
+	N->setKey(-1,i);
+	
+}
+
+temp.Set_keyCount(max-keys/2);
+N->set_keyCount(max-keys-temp.get_KeyCount());
+N->get_ParentPtr()->insertKey(N,temp, temp.getKey(),0)
+N->get_ParentPtr()->SearchKey();
+
+*/
 
 }
 
