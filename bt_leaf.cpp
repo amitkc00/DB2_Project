@@ -3,22 +3,7 @@
 // Team : Amit & Mike
 
 
-#include "bt_leaf.h"
-
-BtreeLeaf::~BtreeLeaf(){}
-
-//insert to node, key of type KeyId and keyCount-int
-Status BtreeLeaf::insertKey(KeyId, int){
-  return OK;
-}
-
-Status BtreeLeaf::deleteKey(KeyId, int){
-  return OK;
-}
-
-Status BtreeLeaf::searchKey(KeyId, int){
-  return OK;
-}
+# include "bt_leaf.h"
 
 /*
 public:
@@ -60,7 +45,7 @@ Status BtreeLeaf::insertKey(KeyId KeyValue, int KeyCount) {
 		return LEAF_IS_FULL;
 	else {
 		for(int i = 0; i< MAX_NUM_KEYS;i++) {
-			if(KeyValue <= key[i]) {
+			if(KeyValue <= key[i] && key[i] != -1) {
 				int shift = MAX_NUM_KEYS - (i + 1);
 				int j = 1;
 				while(j != shift ) {
