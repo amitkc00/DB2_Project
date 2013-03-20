@@ -10,38 +10,33 @@ BtreeBuilder::~BtreeBuilder(){
   destroyBtree();
 }
 
+
 Status BtreeBuilder::insertBuilderKey(KeyId KeyValue) {
-
-  //AMIT
-  //Step 1 : Find the Child Pointer the KeyId needs to be inserted.
-  const int type = root->get_type();
-  if (type == LEAF) {
-    // Traverse this node and insert your value
-    Status ret = root->insertKey(KeyValue,root->get_keyCount()) ; // As defined in bt_node.cpp
-    if (ret == LEAF_IS_FULL) {
-      //Split the Node.
-      //splitNode();	
-    }	
-    
-  }
-  else {
-    BtreeNode *temp;
-    root->searchKey(KeyValue,0,&temp);
-    while(temp->get_type() != LEAF){
-      temp->searchKey(KeyValue,0,&temp);
-    }
-    Status ret = temp->insertKey(KeyValue,temp->get_keyCount());
-    if (ret == LEAF_IS_FULL) {
-      //Split the Node.
-      //splitNode();	
-    }	
-  }
-  
-  
-  //Step 2 : If the Child Pointer is of type LEAF, then insert it using leaf insertKey() else return error LEAF IS FULL
-  
-
-
+	//Step 1 : Find the Child Pointer the KeyId needs to be inserted.
+	const int type = root->get_type();
+	if (type == LEAF) {
+		// Traverse this node and insert your value
+		Status ret = root->insertKey(KeyValue,root->get_keyCount()) ; // As defined in bt_node.cpp
+		if (ret == LEAF_IS_FULL) {
+			//Split the Node.
+			//splitNode();	
+		}	
+		return OK;	
+	}
+	else {
+		BtreeNode *temp
+		root->searchKey(KeyValue,0,&temp);
+		while(temp->get_type() != LEAF){
+			temp->searchKey(KeyValue,0,&temp);
+		}
+		Status ret = temp->insertKey(KeyValue,temp->get_keyCout());
+		if (ret == LEAF_IS_FULL) {
+			//Split the Node.
+			//splitNode();	
+		}	
+		return OK;
+	}
+	return FAIL; 
 
 }
 
@@ -49,7 +44,10 @@ Status BtreeBuilder::deleteBuilderKey(KeyId) {
 
 }
 
-Status BtreeBuilder::splitNode(KeyId, KeyId *&, BtreeNode *, BtreeNode *&, BtreeNode *&) {
+Status BtreeBuilder::splitNode(KeyId KeyValue, KeyId *&, BtreeNode * FullNode, BtreeNode *& lChild, BtreeNode *& rChild) {
+		
+
+
 
 /*
 Points for splitNode.
