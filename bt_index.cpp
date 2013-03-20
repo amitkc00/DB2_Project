@@ -72,7 +72,7 @@ Status BtreeIndex::deleteKey(KeyId key, int count){
   return OK;
 }
 
-Status BtreeIndex::searchKey(KeyId key, int count, BtreeNode* childPtr){
+Status BtreeIndex::searchKey(KeyId key, int count, BtreeNode** childPtr){
   int i;
   BtreeNode *child;
   int num_keys = get_keyCount();
@@ -83,13 +83,13 @@ Status BtreeIndex::searchKey(KeyId key, int count, BtreeNode* childPtr){
       if(getKey(i) > key){
 	//left pointer
 	child = getPtr(i+1);
-	*childPtr = *child;
+	*childPtr = child;
 	return OK;
       }
 
       //right pointer
       child = getPtr(i+1);
-      *childPtr = *child;
+      *childPtr = child;
       return OK;
 
     } else if( (i == 0) && (getKey(i) > key) ){
@@ -97,7 +97,7 @@ Status BtreeIndex::searchKey(KeyId key, int count, BtreeNode* childPtr){
 
       //left pointer
       child = getPtr(i);
-      *childPtr = *child;
+      *childPtr = child;
       return OK;
 
     } else if ( (getKey(i-1) < key) && (getKey(i) > key) ){
@@ -105,7 +105,7 @@ Status BtreeIndex::searchKey(KeyId key, int count, BtreeNode* childPtr){
 
       //left pointer
       child = getPtr(i);
-      *childPtr = *child;
+      *childPtr = child;
       return OK;
     }
   }

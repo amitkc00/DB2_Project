@@ -33,7 +33,7 @@ public:
 	
 	Status deleteKey(KeyId, int);
 		
-	Status searchKey(KeyId, int, BtreeNode* childPtr);
+	Status searchKey(KeyId, int, BtreeNode** childPtr);
 
 };
 
