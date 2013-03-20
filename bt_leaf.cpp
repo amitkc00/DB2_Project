@@ -27,14 +27,6 @@ public:
 */
 
 
-BtreeLeaf::set_type(LEAF) {
-
-}
-
-BtreeLeaf::set_keyCount(0){
-
-}
-
 BtreeLeaf::~BtreeLeaf() {
 
 }
@@ -44,13 +36,13 @@ Status BtreeLeaf::insertKey(KeyId KeyValue, int KeyCount) {
 	if(KeyCount == MAX_NUM_KEYS)	
 		return LEAF_IS_FULL;
 	else {
-		for(int i = 0; i< MAX_NUM_KEYS;i++) {
+		for(int i = 0; i< MAX_NUM_KEYS; i++) {
 			if(KeyValue <= key[i] && key[i] != -1) {
 				int shift = MAX_NUM_KEYS - (i + 1);
 				int j = 1;
 				while(j != shift ) {
-					key[MAX_NUM_KEYS-j] = key[MAX_NUM_KEYS-j-1]
-					j++;
+				  key[MAX_NUM_KEYS-j] = key[MAX_NUM_KEYS-j-1];
+				  j++;
 				}
 				key[i]=KeyValue;
 				set_keyCount(KeyCount+1);
@@ -65,7 +57,21 @@ Status BtreeLeaf::deleteKey(KeyId, int) {
 
 }
 
-Status BtreeLeaf::searchKey(KeyId, int) {
+Status BtreeLeaf::searchKey(KeyId key, int *pos) {
+
+  int i;
+
+  /*  while(getKey(i) < key)
+      i++;*/
+
+  for(i = 0; i < get_keyCount(); i++){
+    if(getKey(i) >= key){
+      *pos = i;
+      return OK;
+    }
+  }
+
+  return KEY_NOT_FOUND;
 
 }
 

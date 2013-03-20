@@ -32,7 +32,7 @@ public:
 
 	Status deleteKey(KeyId, int);
 
-	Status searchKey(KeyId, int);
+	Status searchKey(KeyId, int *pos);
 		
 
 };

@@ -5,6 +5,10 @@
 #include "bt_scan.h"
 #include "bt_errors.h"
 
+BtreeScan::BtreeScan(){
+
+}
+
 BtreeScan::~BtreeScan(){
   //cleanup
 }
@@ -45,6 +49,9 @@ Status BtreeScan::getNext(KeyId *key){
 
   *key = leaf->getKey(pos);
   pos++;
+  //if we are at a key that is greater than our endKey then we did not find a match.
+  if( (endKey != NULL) && (*key > endKey) )
+    return KEY_NOT_FOUND;
   if(pos > leaf->get_keyCount()){
     //find the next leaf
     BtreeNode *temp = leaf->get_parentPtr();
@@ -83,6 +90,10 @@ Status BtreeScan::getNext(KeyId *key){
     //if we have not overstepped the bounds of the node we return ok
     return OK;
   }
+
+  //if we want to search the entire list and have reached the end then we are done
+  if(endKey == NULL)
+    return DONE;
 
   //we overstepped our current node and cannot find the next leaf
   return NO_MORE_KEYS;

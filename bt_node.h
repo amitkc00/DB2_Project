@@ -78,13 +78,13 @@ public:
 	}
 	
 	//search function with 3 parameters - needed for BtreeIndex, where childPtr will be set to the pointer on which we need to move downwards in tree	
-	virtual Status searchKey(KeyId, int, BtreeNode*& childPtr){
+	virtual Status searchKey(KeyId, int, BtreeNode** childPtr){
 		cout<<"U r in wrong place"<<endl;
 		return OK;
 	}
 
 	//search function with 2 parameters - BtreeLeaf
-	virtual Status searchKey(KeyId, int){
+	virtual Status searchKey(KeyId, int*){
 		cout<<"U r in wrong place"<<endl;
 		return OK;
 	}
