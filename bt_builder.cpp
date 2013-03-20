@@ -24,12 +24,12 @@ Status BtreeBuilder::insertBuilderKey(KeyId KeyValue) {
 		return OK;	
 	}
 	else {
-		BtreeNode *temp
+	        BtreeNode *temp;
 		root->searchKey(KeyValue,0,&temp);
 		while(temp->get_type() != LEAF){
 			temp->searchKey(KeyValue,0,&temp);
 		}
-		Status ret = temp->insertKey(KeyValue,temp->get_keyCout());
+		Status ret = temp->insertKey(KeyValue,temp->get_keyCount());
 		if (ret == LEAF_IS_FULL) {
 			//Split the Node.
 			//splitNode();	
