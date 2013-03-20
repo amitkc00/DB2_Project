@@ -1,6 +1,6 @@
-// 91574 Database II - C++ Programming
-// Swathi Kurunji, UMass Lowell, MA, 2011
-// bt_index.h - definition of class BtreeIndex.
+// File name : bt_index.h
+// Date : 03/06/2013
+// Team : Amit & Mike
 
 #ifndef BT_INDEX_H
 #define BT_INDEX_H

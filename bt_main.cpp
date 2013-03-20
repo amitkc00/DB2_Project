@@ -1,6 +1,6 @@
-// 91574 Database II - C++ Programming
-// Swathi Kurunji, UMass Lowell, MA, 2011
-// bt_main.cpp - main() for this project
+// File name : bt_main.cpp
+// Date : 03/06/2013
+// Team : Amit & Mike
 
 #ifndef BT_MAIN_CPP
 #define BT_MAIN_CPP

@@ -1,3 +1,7 @@
+// File name : bt_scan.cpp
+// Date : 03/06/2013
+// Team Amit & Mike
+
 #include "bt_scan.h"
 #include "bt_errors.h"
 

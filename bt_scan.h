@@ -1,6 +1,6 @@
-// 91574 Database II - C++ Programming
-// Swathi Kurunji, UMass Lowell, MA, 2011
-// bt_scan.h
+// File name : bt_scan.h
+// Date : 03/06/2013
+// Team : Amit & Mike
  
 #ifndef BT_SCAN_H
 #define BT_SCAN_H

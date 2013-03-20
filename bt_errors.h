@@ -1,6 +1,6 @@
-// 91574 Database II - C++ Programming
-// Swathi Kurunji, UMass Lowell, MA, 2011
-// bt_errors.h error types are defined in this file
+// File name : bt_errors.h
+// Date : 03/06/2013
+// Team : Amit & Mike
 
 #ifndef BT_ERRORS_H
 #define BT_ERRORS_H

@@ -1,3 +1,7 @@
+// File name : bt_index.cpp
+// Date : 03/06/2013
+// Team : Amit & Mike
+
 #include "bt_index.h"
 #include "bt_errors.h"
 

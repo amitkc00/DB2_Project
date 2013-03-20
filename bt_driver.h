@@ -1,6 +1,6 @@
-// 91574 Database II - C++ Programming
-// Swathi Kurunji, UMass Lowell, MA, 2011
-// bt_driver.h - definition of class BtreeTest for this project.
+// File name : bt_driver.h
+// Date : 03/06/2013
+// Tem : Amit & Mike 
 
 #ifndef BT_DRIVER_H
 #define BT_DRIVER_H

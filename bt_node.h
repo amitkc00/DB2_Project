@@ -1,6 +1,6 @@
-// 91574 Database II - C++ Programming
-// Swathi Kurunji, UMass Lowell, MA, 2011
-// bt_node.h - definition of class BtreeNode for this project.
+// File name : bt_node.h
+// Date : 03/06/2013
+// Team : Amit & Mike
 
 #ifndef BT_NODE_H
 #define BT_NODE_H
