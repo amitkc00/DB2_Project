@@ -61,9 +61,6 @@ Status BtreeLeaf::searchKey(KeyId key, int *pos) {
 
   int i;
 
-  /*  while(getKey(i) < key)
-      i++;*/
-
   for(i = 0; i < get_keyCount(); i++){
     if(getKey(i) >= key){
       *pos = i;
