@@ -32,7 +32,8 @@ BtreeLeaf::~BtreeLeaf() {
 }
 
 //AMIT
-Status BtreeLeaf::insertKey(KeyId KeyValue, int KeyCount) {
+Status BtreeLeaf::insertKey(KeyId KeyValue, int x) {
+	int KeyCount = get_keyCount();
 	if(KeyCount == MAX_NUM_KEYS)	
 		return LEAF_IS_FULL;
 	else {

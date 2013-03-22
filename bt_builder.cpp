@@ -16,8 +16,9 @@ Status BtreeBuilder::insertBuilderKey(KeyId KeyValue) {
 	const int type = root->get_type();
 	if (type == LEAF) {
 		// Traverse this node and insert your value
-		Status ret = root->insertKey(KeyValue,root->get_keyCount()) ; // As defined in bt_node.cpp
+		Status ret = root->insertKey(KeyValue,0) ; // As defined in bt_node.cpp
 		if (ret == LEAF_IS_FULL) {
+			splitNode(KeyValue,,root,getPtr(MAX_NUM_KEYS-1),getPtr(MAX_NUM_KEYS));
 			//Split the Node.
 			//splitNode();	
 		}	
@@ -29,7 +30,8 @@ Status BtreeBuilder::insertBuilderKey(KeyId KeyValue) {
 		while(temp->get_type() != LEAF){
 			temp->searchKey(KeyValue,0,&temp);
 		}
-		Status ret = temp->insertKey(KeyValue,temp->get_keyCount());
+
+		Status ret = temp->insertKey(KeyValue,0);
 		if (ret == LEAF_IS_FULL) {
 			//Split the Node.
 			//splitNode();	
@@ -44,8 +46,96 @@ Status BtreeBuilder::deleteBuilderKey(KeyId) {
 
 }
 
-Status BtreeBuilder::splitNode(KeyId KeyValue, KeyId *&, BtreeNode * FullNode, BtreeNode *& lChild, BtreeNode *& rChild) {
+Status BtreeBuilder::splitNode(KeyId KeyValue, KeyId *&, BtreeNode * FullNode_Ptr, BtreeNode *& lChild_Ptr, BtreeNode *& rChild_Ptr) {
+	if (FullNode_Ptr->get_type() == LEAF) {
+		BtreeNode New_SplitNode;
+		for (int i = MAX_NUM_KEYS/2 ; i < MAX_NUM_KEYS ; i++) {
+			Status ret = New_SplitNode->insertKey(FullNode_Ptr->getKey(i),0);
+			if(ret != OK)
+				return FAIL;
+			FullNode_Ptr->setKey(-1,i);
+			FullNode_Ptr->set_keyCount(FullNode_Ptr->get_keyCount()-1);
+		}
+		Status ret2 = New_SplitNode->insertKey(KeyValue,0);
+		if(ret2 != OK)
+			return FAIL;
+		if (FulNode_Ptr == root) {
+			BtreeNode New_IndexNode;
+			Status ret = New_IndexNode->insertKey(New_SplitNode->getKey(0), int count, FullNode_Ptr, New_SplitNode);
+			if (ret == OK)
+				root = New_IndexNode;
+			else
+				return FAIL;
+		}
+		else { // When it is not root, we need to insert entry for new leaf node in parent node.
+			Status ret = (FullNode_ptr->get_parentPtr())->insertKey(NewSplitNode->getKey(0),int count, FullNode_Ptr, New_SplitNode);
+			if (return == OK)
+				return OK;
+			else if (ret == INDEX_IS_FULL) {  // This is a recursive call to splitNode to handle this case.
+				ret = splitNode(New_SplitNode->getKey(0),,FullNode_ptr->get_parentPtr(),FullNode_Ptr, New_SplitNode)
+				if (return != OK)
+					return FAIL;
+			}
+			else
+				return FAIL;
+		}
+		return OK;
+	}
+	else if (FullNode_Ptr->get_type() == INDEX) {
+		BtreeNode New_IndexNode;
+		BtreeNode* FullNode_Ptr_last = FullNode_Ptr->getPtr(MAX_NUM_KEYS-1);
+		for (int i = MAX_NUM_KEYS/2 ; i < MAX_NUM_KEYS ; i++) {
+			Status ret = New_IndexNode->insertKey(FullNode_Ptr->getKey(i), int count, FullNode_Ptr->getPtr(i), FullNode_Ptr->getPtr(i+1));
+			if(ret != OK)
+				return FAIL;
+			FullNode_Ptr->setKey(-1,i);
+			FullNode_Ptr->setPtr(NULL,i);
+			FullNode_Ptr->setPtr(NULL,i+1);
+            FullNode_Ptr->set_keyCount(FullNode_Ptr->get_keyCount()-1);
+		}
+		ret = New_IndexNode->insertKey(KeyValue,int count, FullNode_Ptr_last, New_IndexNode);
+		if (ret != OK)
+			return FAIL;
+		if (FullNode_Ptr == root) { //If Full Index Node was root, we create a new Index node and mark it as root after moving our first pointer fron New_IndexNode to it.
+			BtreeNode New_IndexNode_root;
+			Status ret = New_IndexNode_root->insertKey(New_IndexNode->getKey(0), int count, FullNode_Ptr, New_IndexNode);
+			
+		}
+		else {
+
+		}
 		
+		//Creat a New Root Node because of Index Node Split and Take the first element from New_IndexNode and move it to Parent Nod.
+
+/*
+Step 1 : If 
+
+*/
+
+
+
+/*
+		if(ret != OK)
+			return FAIL;
+		
+
+		Status ret = (FullNode_ptr->get_parentPtr())->insertKey(NewSplitNode->getKey(0),int count, FullNode_Ptr, New_SplitNode);
+		if (ret == OK)
+			return OK;
+		else if (ret == FAIL)
+			return FAIL;
+		else if (return == INDEX_IS_FULL)
+			splitNode(KeyValue,,FullNode_Ptr->get_parentPtr(),FullNode_Ptr->getPtr(),FUllNode_Ptr->getPtr());
+
+		if (FulNode_Ptr == root) {
+			BtreeNode New_IndexNode;
+			Status ret = New_IndexNode->insertKey(New_SplitNode->getKey(0), int count, FullNode_Ptr, New_SplitNode);
+			if (ret == OK)
+				root = New_IndexNode;
+		}
+*/
+	}
+}		
 
 
 
