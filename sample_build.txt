@@ -1,0 +1,28 @@
+File name : sample_build.txt
+Date : 3/24/13
+Team : Amit & Mike
+
+
+mfeole@cs4:~/Grad/DB2/DB2_Project$ hostname;pwd;make
+cs4
+/usr/cs/grad/grad/mfeole/Grad/DB2/DB2_Project
+g++ -DUNIX -Wall -g -c bt_main.cpp -o bt_main.o
+g++ -DUNIX -Wall -g -c bt_driver.cpp -o bt_driver.o
+g++ -DUNIX -Wall -g -c bt_builder.cpp -o bt_builder.o
+bt_builder.cpp: In member function BtreeScan* BtreeBuilder::openScan(KeyId, KeyId):
+bt_builder.cpp:203:16: warning: NULL used in arithmetic [-Wpointer-arith]
+g++ -DUNIX -Wall -g -c bt_node.cpp -o bt_node.o
+g++ -DUNIX -Wall -g -c bt_index.cpp -o bt_index.o
+g++ -DUNIX -Wall -g -c bt_leaf.cpp -o bt_leaf.o
+g++ -DUNIX -Wall -g -c bt_scan.cpp -o bt_scan.o
+bt_scan.cpp: In member function Status BtreeScan::getNext(KeyId*):
+bt_scan.cpp:53:18: warning: NULL used in arithmetic [-Wpointer-arith]
+bt_scan.cpp:74:19: warning: NULL used in arithmetic [-Wpointer-arith]
+bt_scan.cpp:88:18: warning: NULL used in arithmetic [-Wpointer-arith]
+bt_scan.cpp:93:20: warning: NULL used in arithmetic [-Wpointer-arith]
+bt_scan.cpp:93:73: warning: NULL used in arithmetic [-Wpointer-arith]
+bt_scan.cpp:93:107: warning: suggest parentheses around&&within || [-Wparentheses]
+bt_scan.cpp:100:16: warning: NULL used in arithmetic [-Wpointer-arith]
+g++ -DUNIX -Wall -g  bt_main.o  bt_driver.o  bt_builder.o  bt_node.o  bt_index.o  bt_leaf.o  bt_scan.o -o btree
+mfeole@cs4:~/Grad/DB2/DB2_Project$
+

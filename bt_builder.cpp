@@ -7,7 +7,7 @@
 
 
 BtreeBuilder::~BtreeBuilder(){
-	destroyBtree();
+  //destroyBtree();
 }
 
 
@@ -15,12 +15,11 @@ Status BtreeBuilder::insertBuilderKey(KeyId KeyValue) {
 	Status ret;
 	//Step 1 : Find the Child Pointer the KeyId needs to be inserted.
 	const int type = root->get_type();
-	KeyId * KeyValue_MoveUp= &KeyValue;
 	if (type == LEAF) {
 		// Traverse this node and insert your value
 		ret = root->insertKey(KeyValue,0) ; // As defined in bt_node.cpp
 		if (ret == LEAF_IS_FULL) {
-			ret = splitNode(KeyValue,KeyValue_MoveUp,root,root->getPtr(MAX_NUM_KEYS-1),root->getPtr(MAX_NUM_KEYS));
+			ret = splitNode(KeyValue,root,root->getPtr(MAX_NUM_KEYS-1),root->getPtr(MAX_NUM_KEYS));
 			if (ret != OK)
 				return FAIL;
 		}	
@@ -36,7 +35,7 @@ Status BtreeBuilder::insertBuilderKey(KeyId KeyValue) {
 		}
 		ret = temp->insertKey(KeyValue,0);
 		if (ret == LEAF_IS_FULL) {
-			ret = splitNode(KeyValue,KeyValue_MoveUp,temp,temp->getPtr(MAX_NUM_KEYS-1),temp->getPtr(MAX_NUM_KEYS));
+			ret = splitNode(KeyValue,temp,temp->getPtr(MAX_NUM_KEYS-1),temp->getPtr(MAX_NUM_KEYS));
 			if (ret != OK)
 				return FAIL;
 		}	
@@ -50,13 +49,12 @@ Status BtreeBuilder::deleteBuilderKey(KeyId) {
 	return OK;
 }
 
-Status BtreeBuilder::splitNode(KeyId KeyValue, KeyId *& KeyValue_MoveUp, BtreeNode * FullNode_Ptr, BtreeNode *& lChild_Ptr, BtreeNode *& rChild_Ptr) {
+Status BtreeBuilder::splitNode(KeyId KeyValue, BtreeNode * FullNode_Ptr, BtreeNode * lChild_Ptr, BtreeNode * rChild_Ptr) {
 	Status ret;
-	int count=0; //TEST. WHAT IS ACTUALLY GOING TO BE ITS VALUE. Now sure what is 2nd arg in insertKey fun.
 	if (FullNode_Ptr->get_type() == LEAF) {
 		//BtreeNode *New_SplitNode;
-		BtreeLeaf *New_SplitNode ;
-		New_SplitNode->set_type(LEAF); //FIND OUT IF WE NEED IT TEST
+	  BtreeLeaf *New_SplitNode = new BtreeLeaf ;
+	  //New_SplitNode->set_type(LEAF); //FIND OUT IF WE NEED IT TEST
 		for (int i = MAX_NUM_KEYS/2 ; i < MAX_NUM_KEYS ; i++) {
 			ret = New_SplitNode->insertKey(FullNode_Ptr->getKey(i),0);
 			if(ret != OK)
@@ -64,86 +62,120 @@ Status BtreeBuilder::splitNode(KeyId KeyValue, KeyId *& KeyValue_MoveUp, BtreeNo
 			FullNode_Ptr->setKey(-1,i);
 			FullNode_Ptr->set_keyCount(FullNode_Ptr->get_keyCount()-1);
 		}
-		ret = New_SplitNode->insertKey(KeyValue,0);
+		if(New_SplitNode->getKey(0) >  KeyValue){
+		  //greater
+		  ret = FullNode_Ptr->insertKey(KeyValue,0);
+		}else {
+		  //= or less
+		  ret = New_SplitNode->insertKey(KeyValue,0);
+		}
 		if(ret != OK)
 			return FAIL;
+
 		if (FullNode_Ptr == root) {
 			BtreeNode *New_IndexNode = new BtreeIndex; //TEST if this is correct.
 			//BtreeIndex New_IndexNode;
 			New_IndexNode->set_type(INDEX); //FIND OUT IF WE STILL NEED IT TEST
-			ret = New_IndexNode->insertKey(New_SplitNode->getKey(0), count, FullNode_Ptr, New_SplitNode);
-			if (ret == OK)
+			ret = New_IndexNode->insertKey(New_SplitNode->getKey(0), FullNode_Ptr, New_SplitNode);
+			if (ret == OK){
+			        FullNode_Ptr->set_parentPtr(New_IndexNode);
+				New_SplitNode->set_parentPtr(New_IndexNode);
 				root = New_IndexNode;
-			else
+			} else
 				return FAIL;
 		}
 		else { // When it is not root, we need to insert entry for new leaf node in parent node.
 			//ret = (FullNode_Ptr->get_parentPtr())->insertKey(New_IndexNode->getKey(0),count, FullNode_Ptr, New_IndexNode);
-			ret = (FullNode_Ptr->get_parentPtr())->insertKey(New_SplitNode->getKey(0),count, FullNode_Ptr, New_SplitNode);
-			if (ret != OK)
+			ret = (FullNode_Ptr->get_parentPtr())->insertKey(New_SplitNode->getKey(0), FullNode_Ptr, New_SplitNode);
+			if (ret != OK && ret != INDEX_IS_FULL)
 				return FAIL;
 			else if (ret == INDEX_IS_FULL) {  // This is a recursive call to splitNode to handle this case.
-				ret = splitNode(New_SplitNode->getKey(0),count,FullNode_Ptr->get_parentPtr(),FullNode_Ptr, New_SplitNode);
+				ret = splitNode(New_SplitNode->getKey(0),FullNode_Ptr->get_parentPtr(),FullNode_Ptr, New_SplitNode);
 				//New_SplitNode above may need Change. TEST
 				if (ret != OK)
 					return FAIL;
-			}
-			else
-				return FAIL;
+			}else if (ret == OK){
+			        FullNode_Ptr->set_parentPtr(FullNode_Ptr->get_parentPtr());
+			        New_SplitNode->set_parentPtr(FullNode_Ptr->get_parentPtr());
+			} else
+			        return FAIL;
 		}
 		return OK;
-	}
-	else if (FullNode_Ptr->get_type() == INDEX) {
+	} else if (FullNode_Ptr->get_type() == INDEX) {
 		BtreeNode *New_IndexNode = new BtreeIndex;
 		//BtreeIndex New_IndexNode;
 		New_IndexNode->set_type(INDEX); //TEST IF WE REALLY NEED IT.
-		BtreeNode* FullNode_Ptr_last = FullNode_Ptr->getPtr(MAX_NUM_KEYS-1); //DO WE REALLY NEED IT.
 		int i;
 		for (i = MAX_NUM_KEYS/2 ; i < MAX_NUM_KEYS ; i++) {
-			ret = New_IndexNode->insertKey(FullNode_Ptr->getKey(i), count, FullNode_Ptr->getPtr(i), FullNode_Ptr->getPtr(i+1));
+			ret = New_IndexNode->insertKey(FullNode_Ptr->getKey(i), FullNode_Ptr->getPtr(i), FullNode_Ptr->getPtr(i+1));
 			if(ret != OK)
 				return FAIL;
 			FullNode_Ptr->setKey(-1,i);
-			FullNode_Ptr->setPtr(NULL,i);
+			//FullNode_Ptr->setPtr(NULL,i);
 			//Since keys share children we cannot clear i+1 until the end.
 			//FullNode_Ptr->setPtr(NULL,i+1);
 			FullNode_Ptr->set_keyCount(FullNode_Ptr->get_keyCount()-1);
 		}
-		//we set the last child pointer to null
-		FullNode_Ptr->setPtr(NULL,i);
-		Status ret = New_IndexNode->insertKey(KeyValue,0, FullNode_Ptr_last, New_IndexNode);
+		for (i = MAX_NUM_KEYS/2 ; i < MAX_NUM_KEYS ; i++) {
+		        //we set the right pointers to null
+		        FullNode_Ptr->setPtr(NULL,i+1);
+		}
+		Status ret;
+		if( New_IndexNode->getKey(0) > KeyValue ){
+		  //less than
+		  // lChild_Ptr, BtreeNode * rChild_Ptr
+		  ret = FullNode_Ptr->insertKey(KeyValue, lChild_Ptr, rChild_Ptr);
+		  lChild_Ptr->set_parentPtr(FullNode_Ptr);
+		  rChild_Ptr->set_parentPtr(FullNode_Ptr);
+		} else{
+		  //greater than or =
+		  ret = New_IndexNode->insertKey(KeyValue, lChild_Ptr, rChild_Ptr);
+		  lChild_Ptr->set_parentPtr(New_IndexNode);
+		  rChild_Ptr->set_parentPtr(New_IndexNode);
+		}
 		if (ret != OK)
 			return FAIL;
+
+		KeyId parent_insert = New_IndexNode->getKey(0);
+		//shift on the right node has not been done yet
+		for (int i = 0 ; i < MAX_NUM_KEYS ; i++) {
+		  New_IndexNode->setKey(New_IndexNode->getKey(i+1),i);
+		  New_IndexNode->setPtr(New_IndexNode->getPtr(i+1),i);
+		}
+		New_IndexNode->set_keyCount(New_IndexNode->get_keyCount()-1);
+
 		if (FullNode_Ptr == root) { //If Full Index Node was root, we create a new Index node and mark it as root after moving our first pointer fron New_IndexNode to it.
 			BtreeNode *New_IndexNode_root = new BtreeIndex;
 			//BtreeIndex New_IndexNode_root;
-			ret = New_IndexNode_root->insertKey(New_IndexNode->getKey(0), count, New_IndexNode->getPtr(0),New_IndexNode->getPtr(1));
+			ret = New_IndexNode_root->insertKey(parent_insert, FullNode_Ptr,New_IndexNode);
 			if (ret != OK)
 				return FAIL;
 			if (ret == OK) {
+			        FullNode_Ptr->set_parentPtr(New_IndexNode_root);
+				New_IndexNode->set_parentPtr(New_IndexNode_root);
 				root = New_IndexNode_root;
-				//Shifting New_IndexNode one position to Left after its first element is move to root.	
-				for (int i = 0 ; i < MAX_NUM_KEYS ; i++) 
-					 New_IndexNode->setKey(New_IndexNode->getKey(i+1),i);
-				New_IndexNode->set_keyCount(New_IndexNode->get_keyCount()-1);
 			}
 		}
 		else {
 			//ret = (FullNode_ptr->get_parentPtr())->insertKey(NewSplitNode->getKey(0),int count, FullNode_ptr, New_SplitNode);
-			ret = (FullNode_Ptr->get_parentPtr())->insertKey(New_IndexNode->getKey(0),count, FullNode_Ptr, New_IndexNode);
-			if (ret != OK)
+			ret = (FullNode_Ptr->get_parentPtr())->insertKey(parent_insert, FullNode_Ptr, New_IndexNode);
+			if (ret != OK && ret != INDEX_IS_FULL)
 				return FAIL;
 			else if (ret == INDEX_IS_FULL) {
-				ret = splitNode(New_IndexNode->getKey(0), FullNode_Ptr->get_parentPtr(),FullNode_Ptr,New_IndexNode);
+				ret = splitNode(parent_insert, FullNode_Ptr->get_parentPtr(),FullNode_Ptr,New_IndexNode);
 				if (ret != OK)
 					return FAIL;		
 			}
-			else
+			else if (ret == OK){
+			        FullNode_Ptr->set_parentPtr(FullNode_Ptr->get_parentPtr());
+			        New_IndexNode->set_parentPtr(FullNode_Ptr->get_parentPtr());
+			} else
 				return FAIL;
 		}
 		return OK;
 		//Create a New Root Node because of Index Node Split and Take the first element from New_IndexNode and move it to Parent Nod.
 	}
+	return FAIL;
 }		
 
 
@@ -192,7 +224,7 @@ BtreeScan* BtreeBuilder::openScan(KeyId lo_key, KeyId hi_key) {
 }
 
 Status BtreeBuilder::findStartPosition(BtreeScan* , KeyId) {
-
+  return OK;
 }
 
 Status BtreeBuilder::destroyBtree () {

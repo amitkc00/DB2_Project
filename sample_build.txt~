@@ -1,0 +1,8 @@
+g++ -DUNIX -Wall -g -c bt_main.cpp -o bt_main.o
+g++ -DUNIX -Wall -g -c bt_driver.cpp -o bt_driver.o
+g++ -DUNIX -Wall -g -c bt_builder.cpp -o bt_builder.o
+g++ -DUNIX -Wall -g -c bt_node.cpp -o bt_node.o
+g++ -DUNIX -Wall -g -c bt_index.cpp -o bt_index.o
+g++ -DUNIX -Wall -g -c bt_leaf.cpp -o bt_leaf.o
+g++ -DUNIX -Wall -g -c bt_scan.cpp -o bt_scan.o
+g++ -DUNIX -Wall -g  bt_main.o  bt_driver.o  bt_builder.o  bt_node.o  bt_index.o  bt_leaf.o  bt_scan.o -o btree 

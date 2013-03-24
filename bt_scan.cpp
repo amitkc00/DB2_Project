@@ -52,14 +52,16 @@ Status BtreeScan::getNext(KeyId *key){
   //if we are at a key that is greater than our endKey then we did not find a match.
   if( (endKey != NULL) && (*key > endKey) )
     return KEY_NOT_FOUND;
-  if(pos > leaf->get_keyCount()){
+  else if( *key == -1)
+    return DONE;
+  if(pos >= leaf->get_keyCount()){
     //find the next leaf
     BtreeNode *temp = leaf->get_parentPtr();
     int i;
     while(temp != NULL){
       //while we are not trying to go to the root's parent
 
-      for(i = 0; i > MAX_NUM_PTRS; i++){
+      for(i = 0; i < MAX_NUM_PTRS; i++){
 	//iterate through all pointers
 	if( (temp->getPtr(i) == leaf) && (temp->getPtr(i + 1) != NULL) ){
 	  //if we find a match and there is another leaf pointer in this node
@@ -82,10 +84,13 @@ Status BtreeScan::getNext(KeyId *key){
       }
 
     }
+    //if last node 
+    if(endKey == NULL && temp == NULL)
+      return OK;
 
   } else {
     //if we have a valid end key and have reached it, return done
-    if( (endKey != NULL) && (leaf->getKey(pos) > endKey) )
+    if( (endKey != NULL) && (leaf->getKey(pos) > endKey) || ((endKey == NULL) && (leaf->getKey(pos) == -1)) )
       return DONE;
     //if we have not overstepped the bounds of the node we return ok
     return OK;

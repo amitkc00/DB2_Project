@@ -6,7 +6,7 @@
 #include "bt_errors.h"
 
 
-Status BtreeIndex::insertKey(KeyId key, int count, BtreeNode* leftChild, BtreeNode* rightChild){
+Status BtreeIndex::insertKey(KeyId key, BtreeNode* leftChild, BtreeNode* rightChild){
   //insert key into array at index count, insert leftChild at index count and rightChild at index count + 1
 
   KeyId current_keyCount = get_keyCount();
@@ -77,7 +77,7 @@ Status BtreeIndex::searchKey(KeyId key, int count, BtreeNode** childPtr){
   BtreeNode *child;
   int num_keys = get_keyCount();
   for(i = 0; i < num_keys; i++){
-    if(i == num_keys){
+    if(i + 1 == num_keys){
       //end of the list
 
       if(getKey(i) > key){
@@ -92,8 +92,20 @@ Status BtreeIndex::searchKey(KeyId key, int count, BtreeNode** childPtr){
       *childPtr = child;
       return OK;
 
-    } else if( (i == 0) && (getKey(i) > key) ){
+    } else if( (i == 0)  ){
       //beginning of the list
+
+      if (getKey(i) > key){ 
+	//left pointer
+	child = getPtr(i);
+	*childPtr = child;
+	return OK;
+      }
+
+      //otherwise we do not want to do the next case, the next iteration should cover it.
+
+    } else if ( (getKey(i-1) < key) && (getKey(i) == -1) ){
+      //in middle of list
 
       //left pointer
       child = getPtr(i);

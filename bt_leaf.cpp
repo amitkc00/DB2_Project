@@ -38,15 +38,16 @@ Status BtreeLeaf::insertKey(KeyId KeyValue, int x) {
 		return LEAF_IS_FULL;
 	else {
 		for(int i = 0; i< MAX_NUM_KEYS; i++) {
-			if(KeyValue <= key[i] && key[i] != -1) {
+			if(KeyValue <= key[i] || key[i] == -1) {
 				int shift = MAX_NUM_KEYS - (i + 1);
 				int j = 1;
-				while(j != shift ) {
+				while(j <= shift ) {
 				  key[MAX_NUM_KEYS-j] = key[MAX_NUM_KEYS-j-1];
 				  j++;
 				}
 				key[i]=KeyValue;
 				set_keyCount(KeyCount+1);
+				return OK;
 			}	
 		}
 	}
