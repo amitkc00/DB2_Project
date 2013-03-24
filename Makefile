@@ -14,7 +14,11 @@ SRCS =  bt_main.cpp\
 	bt_leaf.cpp\
 	bt_scan.cpp 
 
-OBJS = $(SRCS:.cpp=.o)
+#OBJS = $(SRCS:.cpp=.o)
+OBJS = $(patsubst %.cpp, %.o, $(filter %.cpp,$(SRCS)))
+
+%.o:%.cpp
+	$(CC) $(CFLAGS) -c $< -o $@
 
 $(MAIN):  $(OBJS)
 	 $(CC) $(CFLAGS) $(OBJS) -o $(MAIN) 

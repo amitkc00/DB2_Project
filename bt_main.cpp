@@ -17,10 +17,10 @@ using namespace std;
 
 int main()
 {
-   BtreeTest btt;
+  BtreeTest *btt = new BtreeTest();
    Status dbstatus;
 
-   dbstatus = btt.runTests();
+   dbstatus = btt->runTests();
 
    if (dbstatus != OK) {       
       cout << "Error encountered during btree tests: " << endl;     

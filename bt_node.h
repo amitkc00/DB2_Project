@@ -61,7 +61,7 @@ public:
 	void set_parentPtr(BtreeNode *pointer);
 
 	//insert function with 4 parameters - needed for BtreeIndex 
-	virtual Status insertKey(KeyId, int, BtreeNode*& leftChild, BtreeNode*& rightChild){
+	virtual Status insertKey(KeyId, int, BtreeNode* leftChild, BtreeNode* rightChild){
 		cout<<"U r in wrong place"<<endl;
 		return OK;
 	}
