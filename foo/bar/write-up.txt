@@ -1,0 +1,17 @@
+File name : README.txt
+Date : 3/14/13
+Team : Amit & Mike
+
+
+
+Mike Feole - mfeole@cs.uml.edu
+Amit Choudhary - achoudha@cs.uml.edu
+
+Degree of Success : 100% 
+
+Summary / problem description :
+In the project we chose a more c-style approach where we changed the prototypes to use pointer instead of references. This does NOT have an effect on functionailty and is perfectly valid in c++. In order to get bt_driver.cpp to build we had to fix some basic programming/syntax errors made (commented on within the google groups by Mike). Once that problem was resolved we had an issue with splitting nodes and how to decide where the value being inserted goes. We took the approach of inserting it in the new left or right child depending on the value. We also decided that when splitting an index node, we always promote the first value (after insertion after split) to the parent and shift the other values down in order to have a valid b+ tree. The scan functionality gave us some issue since we thought DONE should be returned when the last value is returned. The distinguising a search of the entire tree by use of NULL provides build warnings since NULL is not used in arithmatic functionality. In class we learned that the leaf nodes are connected via a linked list, however the setup was not as such. The parsing of the tree became a bit more difficult, but the construction was a bit easier. 
+
+Please refer to sample_output.txt and sample_build.txt for our output seen on cs.uml.edu.
+
+Changes were made to the Makefile for debugging purposes.
